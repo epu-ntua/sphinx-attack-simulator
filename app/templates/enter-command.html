@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Flow parameter selection</h1>
+    <form action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <p>
+            {{ form.command.label }}<br>
+            {{ form.command(size=100) }}
+        </p>
+        <p>
+            {{ form.ip1.label }}<br>
+            {{ form.ip1(size=16) }}<br>
+            {% for error in form.ip1.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.ip2.label }}<br>
+            {{ form.ip2(size=16) }}<br>
+            {% for error in form.ip1.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.protocol.label }}<br>
+            {{ form.protocol() }}<br>
+            {% for error in form.protocol.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.pkt_size.label }}<br>
+            {{ form.pkt_size() }}<br>
+            {% for error in form.pkt_size.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.interval.label }}<br>
+            {{ form.interval() }}<br>
+            {% for error in form.interval.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.duration.label }}<br>
+            {{ form.duration(size=8) }}<br>
+            {% for error in form.duration.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>
+            {{ form.delay.label }}<br>
+            {{ form.delay(size=8) }}<br>
+            {% for error in form.delay.errors %}
+            <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </p>
+        <p>{{ form.submit() }}</p>
+    </form>
+{% endblock %}
