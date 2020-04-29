@@ -1,18 +1,19 @@
-#Sphinx Risk Assessment
-This is the git repository for the RCRA module of the Sphinx project
+#Sphinx Behaviour Simulator - Network Traffic Generator
+This is the git repository for the  module of the Sphinx project
 
-#Installation Guide - For developers working on Pycharm
+#Installation Guide
 
 ##Prerequisites
 
-*  Download and install latest python3 - https://www.python.org/downloads/
-*  Download and install Pycharm IDE - https://www.jetbrains.com/pycharm/
+Step 1:  Download and install latest python3 - https://www.python.org/downloads/
+Step 2:  Download and install Pycharm IDE - https://www.jetbrains.com/pycharm/
+         Alternatively you can just go on with git and a conda or a virtual environment installing the requirements.txt file.
 
 ##Installing Risk Assesment Flask 
 From Pycharms' starting screen
 
 * Check out from Version Control ->Git
-*  Copy the url "https://sphinx-repo.intracom-telecom.com/sphinx-project/real-time-cyber-risk-assessment/riskassessmentflask "url into "Git Repository URL"
+*  Copy the url "https://sphinx-repo.intracom-telecom.com/sphinx-project/attack-and-behaviour-simulators/behaviour-attack-simulator.git" url into "Git Repository URL"
 *  Press test and enter gitlab credentials if needed
 *  Clone
 *  Create new virtual environment (File -> Settings -> Project -> Project Intepreter => icon -> Add local -> ok)
