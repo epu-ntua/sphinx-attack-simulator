@@ -1,0 +1,37 @@
+version: "3"
+services:
+
+  node1:
+    container_name: node1
+    build:
+      context: .
+      dockerfile: Dockerfile-node
+    networks:
+      - sphinx-net
+    working_dir: /app
+    command: ["./sender-receiver.sh"]
+
+  node2:
+    container_name: node2
+    build:
+      context: .
+      dockerfile: Dockerfile-node
+    networks:
+      - sphinx-net
+    working_dir: /app
+    command: ["./sender-receiver.sh"]
+
+  supervisor:
+    container_name: super
+    build:
+      context: .
+      dockerfile: Dockerfile-supervisor
+    ports:
+      - "5000:5000"
+    networks:
+      - sphinx-net
+
+
+networks:
+  sphinx-net:
+    driver: bridge
