@@ -31,4 +31,4 @@ class CommandForm(FlaskForm):
     delay = IntegerField('Delay (milliseconds)', [validators.optional()],
         default=0)
 
-    submit =  SubmitField('Submit')
+    submit =  SubmitField('Send flow')

@@ -26,8 +26,7 @@ def command(n_vm):
     form = CommandForm()
     if form.validate_on_submit():
         flash('Sent command to daemon machine: {}'.format(form.command.data))
-        os.system(os.path.join('~/D-ITG-2.8.1-r1023/bin/', str(
-            form.command.data)))
+        os.system(('../D-ITG/bin/'+str(form.command.data)))
         return redirect('/home')
     return render_template('enter-command.html', title='Commander', form=form,
         n_vm=n_vm)
