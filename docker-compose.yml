@@ -2,6 +2,7 @@ version: "3"
 services:
 
   node1:
+    #image:pelekhs/behaviour_node
     container_name: node1
     build:
       context: .
@@ -12,6 +13,7 @@ services:
     command: ["./sender-receiver.sh"]
 
   node2:
+    #image:pelekhs/behaviour_node
     container_name: node2
     build:
       context: .
@@ -22,12 +24,13 @@ services:
     command: ["./sender-receiver.sh"]
 
   supervisor:
+    #image:pelekhs/behaviour_supervisor
     container_name: super
     build:
       context: .
       dockerfile: Dockerfile-supervisor
     ports:
-      - "5000:5000"
+      - "5002:5002"
     networks:
       - sphinx-net
 
