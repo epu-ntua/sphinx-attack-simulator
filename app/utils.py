@@ -44,6 +44,8 @@ def add_new_flow(name, protocol, duration, delay, packet_size_distributions, pac
 def get_all_flow_to_node():
     return FlowToNode.query.all()
 
+def get_flow_to_node(nodeId):
+    return FlowToNode.query.filter(FlowToNode.fk_node_from == nodeId).all()
 
 def add_flow_to_node(flowId, nodeFromId, nodeToId):
     new_connection = FlowToNode(fk_flow=flowId, fk_node_from=nodeFromId, fk_node_to=nodeToId)
@@ -127,5 +129,5 @@ def run_flows():
                 command = create_command(flow, node_from, node_to[0])
 
                 print(command)
-                # flash('Sent command to daemon machine: {}'.format(command))
-                # os.system(('../D-ITG/bin/' + str(command)))
+                flash('Sent command to daemon machine: {}'.format(command))
+                os.system(('../D-ITG/bin/' + str(command)))

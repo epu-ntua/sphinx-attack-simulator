@@ -39,7 +39,7 @@ def vm_overview(nodeId):
         # for nodeIt in all_nodes:
         #     print(nodeIt.id)
         all_flows = get_all_flows()
-        all_flow_to_node = get_all_flow_to_node()
+        all_flow_to_node = get_flow_to_node(nodeId)
     return render_template("vm_overview.html", nodeId=int(nodeId), all_nodes=all_nodes, all_flows = all_flows, all_flow_to_node = all_flow_to_node)
 
 
