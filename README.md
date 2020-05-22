@@ -23,8 +23,19 @@ From Pycharms' starting screen
 Current Database used is Sqlite but it isn't included in github due to size so
 in fresh installs always recreate database 
 # Running the ABS module
-`flask db migrate` (Shouldn't be needed)
-`flask db upgrade` (Necessary to recreate db)
-`db.create_all()` (In python)
+(If necessary: Delete both `app.db` files found in the top level of the repo and 
+inside the `app` folder and the `migrations` file on the top level of the repo.
+Proceed as outlined below)
+
+`flask db init`
+
+`flask db migrate`
+
+`flask db upgrade`
+
+Open a python terminal in the venv and run
+`from app import db`
+`db.create_all()` 
+
 `flask run`
 
