@@ -15,15 +15,21 @@
     <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/general.css') }}">
 </head>
 <body>
-<nav class="navbar  navbar-dark bg-dark">
+<nav class="navbar  navbar-expand-lg navbar-dark bg-dark">
     <a class="navbar-brand" href="http://127.0.0.1:5000/home">Behaviour Simulator home page</a>
-    <div class="navbar-nav">
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="navbar-nav mr-auto">
         <li class="nav-item active">
-            <a class="nav-link" href="http://127.0.0.1:5000/assets">Correlate Threats</a>
+            <a class="nav-link" href="http://127.0.0.1:5000/flow_creation">Create Flows</a>
         </li>
         <li class="nav-item active">
-            <a class="nav-link" href="http://127.0.0.1:5000/shutdown">Shutdown</a>
+            <a class="nav-link" href="http://127.0.0.1:5000/vm_overview">Nodes Overview</a>
         </li>
+{#        <li class="nav-item">#}
+{#            <a class="nav-link" href="http://127.0.0.1:5000/shutdown">Shutdown</a>#}
+{#        </li>#}
+    </div>
     </div>
 </nav>
     {% with messages = get_flashed_messages() %}
@@ -42,6 +48,9 @@
 </div>
 
 
+{% block script %}
+
+{% endblock %}
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
