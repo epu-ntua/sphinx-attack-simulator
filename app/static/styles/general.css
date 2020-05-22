@@ -3,6 +3,23 @@ html, body {
     max-height: 100%;
 }
 
+#new-flow-btn{
+    /*padding: 3px;*/
+    width: 100%;
+    margin-top: 5px;
+}
+
+.size-group{
+    display: none;
+}
+
+.departure-group{
+    display: none;
+}
+.start-hidden{
+    display: none;
+}
+/*-------------*/
 .custom-card {
     width: 22%;
     margin: 2vh;
@@ -26,6 +43,7 @@ html, body {
     border-right: 2px solid #999999;
     overflow: auto;
     max-height: 100vh;
+    height: 90vh;
 }
 
 .custom-select-column-header {

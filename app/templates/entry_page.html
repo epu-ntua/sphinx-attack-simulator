@@ -2,6 +2,8 @@
 
 
 {% block content %}
-<p class="lead">To start the simulator proceed by pressing the following button </p>
-<a class="btn btn-primary"  href="{{ url_for("command") }}"> Start Here </a>
+{#<a class="btn btn-primary"  href="{{ url_for("command") }}"> Manage Nodes </a>#}
+    <a class="btn btn-primary"  href="http://127.0.0.1:5000/vm_overview"> Manage Nodes </a>
+    <a class="btn btn-primary"  href="http://127.0.0.1:5000/flow_creation"> Create Flows </a>
+
 {% endblock %}

@@ -1,0 +1,305 @@
+{% extends "base.html" %}
+
+{% block script %}
+    <script>
+        function changeInterDeparture(sel) {
+            allDivs = document.getElementsByClassName("departure-group");
+            for (var i = 0; i < allDivs.length; i++) {
+                allDivs[i].style.display = 'none';
+            }
+
+            document.getElementById("interdeparture_interval_distribution_1").style.display = "block";
+            document.getElementById("interdeparture_interval_distribution_2").style.display = "none";
+
+            document.getElementById("inter_distribution_title").innerText = sel;
+            switch (sel) {
+                case "constant":
+                    document.getElementById("departure_rate_group").style.display = "block";
+                    break;
+                case "uniform":
+                    document.getElementById("departure_min_rate_group").style.display = "block";
+                    document.getElementById("departure_max_rate_group").style.display = "block";
+                    document.getElementById("interdeparture_interval_distribution_2").style.display = "block";
+                    break;
+                case "exponential":
+                    document.getElementById("departure_mean_group").style.display = "block";
+                    break;
+                case "normal":
+                    document.getElementById("departure_mean_group").style.display = "block";
+                    document.getElementById("departure_std_dev_group").style.display = "block";
+                    document.getElementById("interdeparture_interval_distribution_2").style.display = "block";
+
+                    break;
+                case "poisson":
+                    document.getElementById("departure_mean_group").style.display = "block";
+                    break;
+                case "pareto":
+                    document.getElementById("departure_shape_group").style.display = "block";
+                    document.getElementById("departure_scale_group").style.display = "block";
+                    document.getElementById("interdeparture_interval_distribution_2").style.display = "block";
+                    break;
+                case "cauchy":
+                    document.getElementById("departure_shape_group").style.display = "block";
+                    document.getElementById("departure_scale_group").style.display = "block";
+                    document.getElementById("interdeparture_interval_distribution_2").style.display = "block";
+                    break;
+                case "gamma":
+                    document.getElementById("departure_shape_group").style.display = "block";
+                    document.getElementById("departure_scale_group").style.display = "block";
+                    document.getElementById("interdeparture_interval_distribution_2").style.display = "block";
+                    break;
+                case "weibull":
+                    document.getElementById("departure_shape_group").style.display = "block";
+                    document.getElementById("departure_scale_group").style.display = "block";
+                    document.getElementById("interdeparture_interval_distribution_2").style.display = "block";
+                    break;
+            }
+        }
+
+        function changePacketSize(sel) {
+            allDivs = document.getElementsByClassName("size-group");
+            for (var i = 0; i < allDivs.length; i++) {
+                allDivs[i].style.display = 'none';
+            }
+            document.getElementById("packet_size_distributions_value_1").style.display = "block";
+            document.getElementById("packet_size_distributions_value_2").style.display = "none";
+
+            document.getElementById("packet_size_distribution_title").innerText = sel + "distribution";
+            switch (sel) {
+                case "constant":
+                    document.getElementById("packet_size_group").style.display = "block";
+                    break;
+                case "uniform":
+                    document.getElementById("packet_min_size_group").style.display = "block";
+                    document.getElementById("packet_max_size_group").style.display = "block";
+                    document.getElementById("packet_size_distributions_value_2").style.display = "block";
+                    break;
+                case "exponential":
+                    document.getElementById("packet_mean_group").style.display = "block";
+                    break;
+                case "normal":
+                    document.getElementById("packet_mean_group").style.display = "block";
+                    document.getElementById("packet_std_dev_group").style.display = "block";
+                    document.getElementById("packet_size_distributions_value_2").style.display = "block";
+                    break;
+                case "poisson":
+                    document.getElementById("packet_mean_group").style.display = "block";
+                    break;
+                case "pareto":
+                    document.getElementById("packet_shape_group").style.display = "block";
+                    document.getElementById("packet_scale_group").style.display = "block";
+                    document.getElementById("packet_size_distributions_value_2").style.display = "block";
+                    break;
+                case "cauchy":
+                    document.getElementById("packet_shape_group").style.display = "block";
+                    document.getElementById("packet_scale_group").style.display = "block";
+                    document.getElementById("packet_size_distributions_value_2").style.display = "block";
+                    break;
+                case "gamma":
+                    document.getElementById("packet_shape_group").style.display = "block";
+                    document.getElementById("packet_scale_group").style.display = "block";
+                    document.getElementById("packet_size_distributions_value_2").style.display = "block";
+                    break;
+                case "weibull":
+                    document.getElementById("packet_shape_group").style.display = "block";
+                    document.getElementById("packet_scale_group").style.display = "block";
+                    document.getElementById("packet_size_distributions_value_2").style.display = "block";
+                    break;
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <form action="/flow_creation/{{ flowId }}/" , method="post">
+        <div class="row d-flex information-bar">
+            <div class="col-10">
+                <h5> Create New Flow</h5>
+            </div>
+            {#            {% if asset != -1 %}#}
+            <div class="col-2">
+                <button type="submit" name="new_flow_form" class="btn btn-primary">Submit Flow ></button>
+            </div>
+            {#            {% endif %}#}
+        </div>
+        <div class="row">
+            <div class="col-2 custom-select-column">
+                {% if flowId != 0 %}
+                    <a href="/flow_creation/0/" class="btn btn-primary " id="new-flow-btn">Create New Flow ></a>
+                    <hr>
+                {% endif %}
+                <h3> Select Flow</h3>
+                <hr>
+                <ul class="list-group list-group-flush">
+                    {% for flowIt in flowArray %}
+                        <a href="/flow_creation/{{ flowId }}/" class="list-group-item
+                  {% if flowIt == flowId %}
+                   selected-a
+                   {% else %}
+                   unselected-a
+                   {% endif %}
+                    ">Flow {{ flowIt.name }}
+                        </a>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-10 d-flex flex-wrap align-content-start custom-select-column">
+                {% if flowId == 0 %}
+                    <h2> Create new Flow or select a flow to update it</h2>
+                {% else %}
+                    <h2> Update this flow or select a new one to update</h2>
+                {% endif %}
+                <div class="row flex-grow custom-select-column-header">
+                    <div class="col-6 custom-select-column">
+                        <div class="form-group row">
+                            <label for="name">Flow Name</label>
+                            <input type="text" class="form-control" name="name" id="name" placeholder="Flow name">
+                        </div>
+                        <div class="form-group row">
+                            <label for="protocol">Protocol</label>
+                            <select class="form-control" name="protocol" id="protocol">
+                                <option>tcp</option>
+                                <option>udp</option>
+                            </select>
+                        </div>
+                        <div class="form-group row">
+                            <label for="protocol">Inter-departure time distribution</label>
+                            <select class="form-control" id="interdeparture_interval_distribution"
+                                    name="interdeparture_interval_distribution"
+                                    onchange="changeInterDeparture(this.value)">
+                                <option>constant</option>
+                                <option>uniform</option>
+                                <option>exponential</option>
+                                <option>normal</option>
+                                <option>poisson</option>
+                                <option>pareto</option>
+                                <option>cauchy</option>
+                                <option>gamma</option>
+                                <option>weibull</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="protocol">Packet Size distribution</label>
+                            <select class="form-control" id="packet_size_distributions" name="packet_size_distributions"
+                                    onchange="changePacketSize(this.value)">
+                                <option>constant</option>
+                                <option>uniform</option>
+                                <option>exponential</option>
+                                <option>normal</option>
+                                <option>poisson</option>
+                                <option>pareto</option>
+                                <option>cauchy</option>
+                                <option>gamma</option>
+                                <option>weibull</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Duration (m/s)</label>
+                            <input type="text" class="form-control" name="duration" id="duration" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="name">Delay (m/s)</label>
+                            <input type="text" class="form-control" name="delay" id="delay" placeholder="">
+                        </div>
+                    </div>
+                    <div class="col6">
+                        <h3> Inter-Departure Distribution Details</h3>
+                        <h2 id=inter_distribution_title> No selected Distribution</h2>
+                        <div class="form-group departure-group" id="departure_rate_group">
+                            <label for="name">Rate (default: 1000pkt/s)</label>
+                            {#                            <input type="text" class="form-control" name="interdeparture_rate" id="departure_rate" placeholder="1000">#}
+                        </div>
+                        <div class="form-group departure-group" id="departure_min_rate_group">
+                            <label for="name">Min Rate</label>
+                            {#                            <input type="text" class="form-control" name="interdeparture_min_rate" id="departure_min_rate" placeholder="">#}
+                        </div>
+                        <div class="form-group departure-group" id="departure_mean_group">
+                            <label for="name">Mean</label>
+                            {#                            <input type="text" class="form-control" name="interdeparture_mean" id="departure_mean" placeholder="">#}
+                        </div>
+
+                        <div class="form-group departure-group" id="departure_shape_group">
+                            <label for="name">Shape</label>
+                            {#                            <input type="text" class="form-control" name="interdeparture_shape" id="departure_shape" placeholder="">#}
+                        </div>
+
+                        <input type="text" class="form-control start-hidden" name="interdeparture_interval_distribution_1"
+                               id="interdeparture_interval_distribution_1">
+
+                        <div class="form-group departure-group" id="departure_max_rate_group">
+                            <label for="name">Max Rate </label>
+                            {#                            <input type="text" class="form-control" name="interdeparture_max_rate" id="departure_max_rate" placeholder="">#}
+                        </div>
+                        <div class="form-group departure-group" id="departure_std_dev_group">
+                            <label for="name">Standard Deviation</label>
+                            {#                            <input type="text" class="form-control" name="interdeparture_std_dev" id="departure_std_dev" placeholder="">#}
+                        </div>
+                        <div class="form-group departure-group" id="departure_scale_group">
+                            <label for="name">Scale</label>
+                            {#                            <input type="text" class="form-control" name="interdeparture_scale" id="departure_scale" placeholder="">#}
+                        </div>
+
+                        <input type="text" class="form-control start-hidden" name="interdeparture_interval_distribution_2"
+                               id="interdeparture_interval_distribution_2">
+                        <hr/>
+                        <h3> Packet Size Distribution Details</h3>
+                        <h2 id="packet_size_distribution_title"> No selected Distribution</h2>
+                        <div class="form-group size-group" id="packet_size_group">
+                            <label for="name">Cosntant Size)</label>
+                            {#                            <input type="text" class="form-control" name="packet_size_pkt_size" id="packet_size"#}
+                            {#                                   placeholder="1000">#}
+                        </div>
+                        <div class="form-group size-group" id="packet_min_size_group">
+                            <label for="name">Min Size</label>
+                            {#                            <input type="text" class="form-control" name="packet_size_min_pkt_size" id="packet_min_size"#}
+                            {#                                   placeholder="">#}
+                        </div>
+
+                        <div class="form-group size-group" id="packet_average_group">
+                            <label for="name">Average Packet Size</label>
+                            {#                            <input type="text" class="form-control" name="packet_size_average_pkt_size"#}
+                            {#                                   id="packet_average" placeholder="">#}
+                        </div>
+                        <div class="form-group size-group" id="packet_mean_group">
+                            <label for="name">Mean</label>
+                            {#                            <input type="text" class="form-control" name="packet_size_mean" id="packet_mean"#}
+                            {#                                   placeholder="">#}
+                        </div>
+
+                        <div class="form-group size-group" id="packet_shape_group">
+                            <label for="name">Shape</label>
+                            {#                            <input type="text" class="form-control" name="packet_size_shape" id="packet_shape"#}
+                            {#                                   placeholder="">#}
+                        </div>
+
+                        <input type="text" class="form-control start-hidden" name="packet_size_distributions_value_1"
+                               id="packet_size_distributions_value_1">
+
+                        <div class="form-group size-group" id="packet_max_size_group">
+                            <label for="name">Max Size </label>
+                            {#                            <input type="text" class="form-control" name="packet_size_max_pkt_size" id="packet_max_size"#}
+                            {#                                   placeholder="">#}
+                        </div>
+                        <div class="form-group size-group" id="packet_std_dev_group">
+                            <label for="name">Standard Deviation</label>
+                            {#                            <input type="text" class="form-control" name="packet_size_std_dev" id="packet_std_dev"#}
+                            {#                                   placeholder="">#}
+                        </div>
+                        <div class="form-group size-group" id="packet_scale_group">
+                            <label for="name">Scale</label>
+                            {#                            <input type="text" class="form-control" name="packet_size_scale" id="packet_scale"#}
+                            {#                                   placeholder="">#}
+                        </div>
+
+                        <input type="text" class="form-control start-hidden" name="packet_size_distributions_value_2"
+                               id="packet_size_distributions_value_2">
+                        <hr/>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+
+{% endblock %}

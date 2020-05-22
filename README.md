@@ -25,4 +25,6 @@ in fresh installs always recreate database
 # Running the ABS module
 `flask db migrate` (Shouldn't be needed)
 `flask db upgrade` (Necessary to recreate db)
+`db.create_all()` (In python)
 `flask run`
+
