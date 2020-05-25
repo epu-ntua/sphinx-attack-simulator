@@ -1,4 +1,4 @@
-FROM debian:latest
+FROM kalilinux/kali-rolling:latest
 
 MAINTAINER Sotiris Pelekis
 
@@ -18,6 +18,8 @@ RUN apt-get update && \
     apt-get install -y iputils-ping &&\
     apt-get install -y net-tools &&\
     apt-get install -y tree &&\
+    apt-get install -y procps &&\
+    apt-get install -y d-itg &&\
     wget http://traffic.comics.unina.it/software/ITG/codice/D-ITG-2.8.1-r1023-src.zip && \
     unzip D-ITG-2.8.1-r1023-src.zip && \
     mv D-ITG-2.8.1-r1023 D-ITG && \
@@ -31,13 +33,11 @@ RUN cp libITG/libITG.so /usr/local/lib
 
 ENV LD_LIBRARY_PATH /usr/local/lib
 
-WORKDIR /app/
+WORKDIR /app/behaviour-attack-simulator-flask
 
 # install python
 RUN apt-get install -y python3-pip && \
     python3 -m pip install --upgrade pip
-
-WORKDIR /app/behaviour-attack-simulator-flask
 
 ENV FLASK_RUN_HOST 0.0.0.0
 
@@ -47,4 +47,10 @@ RUN pip install -r requirements.txt
 
 EXPOSE 5002
 
-CMD ["flask", "run"]
+COPY ./flask.sh .
+
+COPY ./create_db.py .
+
+RUN chmod +x flask.sh
+
+CMD [./flask.sh]

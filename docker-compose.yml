@@ -33,6 +33,7 @@ services:
       - "5002:5002"
     networks:
       - sphinx-net
+    command: ["./flask.sh"]
 
 
 networks:
