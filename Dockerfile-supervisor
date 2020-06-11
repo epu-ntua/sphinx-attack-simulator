@@ -20,6 +20,7 @@ RUN apt-get update && \
     apt-get install -y tree &&\
     apt-get install -y procps &&\
     apt-get install -y d-itg &&\
+    apt-get install -y hping3 &&\
     wget http://traffic.comics.unina.it/software/ITG/codice/D-ITG-2.8.1-r1023-src.zip && \
     unzip D-ITG-2.8.1-r1023-src.zip && \
     mv D-ITG-2.8.1-r1023 D-ITG && \

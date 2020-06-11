@@ -1,4 +1,4 @@
-FROM debian:latest
+FROM kalilinux/kali-rolling:latest
 
 MAINTAINER Sotiris Pelekis
 
@@ -13,6 +13,8 @@ RUN apt-get update && \
     apt-get install -y unzip && \
     apt-get install -y tcpdump && \
     apt-get install -y iputils-ping &&\
+    apt-get install -y procps &&\
+    apt-get install -y hping3 &&\
     wget http://traffic.comics.unina.it/software/ITG/codice/D-ITG-2.8.1-r1023-src.zip && \
     unzip D-ITG-2.8.1-r1023-src.zip && \
     mv D-ITG-2.8.1-r1023 D-ITG && \
