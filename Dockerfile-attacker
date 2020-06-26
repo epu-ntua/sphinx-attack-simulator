@@ -1,12 +1,9 @@
-FROM debian:latest
+FROM kalilinux/kali-rolling:latest
 
 MAINTAINER Sotiris Pelekis
 
 # Set the working directory
 WORKDIR  /app
-
-# Copy the current directory contents into the container at /app
-COPY  . /app/behaviour-attack-simulator-flask/
 
 # Install D-ITG and compile
 RUN apt-get update && \
@@ -17,11 +14,8 @@ RUN apt-get update && \
     apt-get install -y tcpdump && \
     apt-get install -y iputils-ping &&\
     apt-get install -y iproute2 &&\
-    apt-get install -y tree &&\
     apt-get install -y procps &&\
-    apt-get install -y d-itg &&\
     apt-get install -y hping3 &&\
-    apt-get install -y docker.io &&\
     wget http://recherche.enac.fr/~avaret/sourcesonoff/sourcesonoff.zip &&\
     wget http://traffic.comics.unina.it/software/ITG/codice/D-ITG-2.8.1-r1023-src.zip && \
     unzip D-ITG-2.8.1-r1023-src.zip && \
@@ -38,24 +32,10 @@ RUN cp libITG/libITG.so /usr/local/lib
 
 ENV LD_LIBRARY_PATH /usr/local/lib
 
-WORKDIR /app/behaviour-attack-simulator-flask
+WORKDIR /app/
 
-# install python
-RUN apt-get install -y python3-pip && \
-    python3 -m pip install --upgrade pip
+COPY ./sender-receiver.sh .
 
-ENV FLASK_RUN_HOST 0.0.0.0
+RUN chmod +x sender-receiver.sh
 
-ENV FLASK_RUN_PORT 5002
-
-RUN pip install -r requirements.txt
-
-EXPOSE 5002
-
-COPY ./flask.sh .
-
-COPY ./create_db.py .
-
-RUN chmod +x flask.sh
-
-CMD [./flask.sh]
+CMD ["./sender-receiver.sh"]

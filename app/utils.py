@@ -2,6 +2,7 @@ from app.models import *
 from app import db
 from flask import flash
 import os
+import time
 
 
 def add_new_node(name):
@@ -58,8 +59,8 @@ def remove_flow_from_node(flowToNodeId):
 
 
 def create_command(flow, node_from, node_to):
-    command = "ITGManager " + str(node_from.name) + " -a " + str(node_to.name) + " -d " + str(
-        flow.delay) + " -t " + str(flow.duration) + " -T " + str(flow.protocol.value)
+    delay = flow.delay if flow.delay else 0
+    command = "ITGManager " + str(node_from.name) + " -a " + str(node_to.name)+ " -t " + str(int(flow.duration)) + " -T " + str(flow.protocol.value)
 
     if flow.interdeparture_interval_distribution.value == "constant":
         command = command + " -C " + str(flow.packet_size_distributions_value_1)
@@ -127,7 +128,9 @@ def run_flows():
                 node_to = Nodes.query.filter(Nodes.id == flow_con.fk_node_to).all()
                 flow = Flows.query.filter(Flows.id == flow_con.id).first()
                 command = create_command(flow, node_from, node_to[0])
-
+                # I implement delay with python cause it won't work
+                delay_in_sec = flow.delay / 1000
+                time.sleep(delay_in_sec)
                 print(command)
                 flash('Sent command to daemon machine: {}'.format(command))
                 os.system(('../D-ITG/bin/' + str(command)))
