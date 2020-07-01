@@ -3,7 +3,7 @@
 
 {% block content %}
 {#<a class="btn btn-primary"  href="{{ url_for("command") }}"> Manage Nodes </a>#}
-    <a class="btn btn-primary"  href="http://0.0.0.0:5002/vm_overview"> Manage Nodes </a>
-    <a class="btn btn-primary"  href="http://0.0.0.0:5002/flow_creation"> Create Flows </a>
+    <a class="btn btn-primary"  href="http://{{ serverAddress }}:{{ serverPort }}/vm_overview"> Manage Nodes </a>
+    <a class="btn btn-primary"  href="http://{{ serverAddress }}:{{ serverPort }}/flow_creation"> Create Flows </a>
 
 {% endblock %}

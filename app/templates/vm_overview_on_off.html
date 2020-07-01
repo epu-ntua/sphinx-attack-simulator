@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block script %}
+
+{% endblock %}
+
+{% block content %}
+    <form action="/vm_overview_on_off/{{ nodeId }}/" , method="post">
+        <div class="row d-flex information-bar">
+            <div class="col-3">
+                <h5> Press the button to begin sending flows:</h5>
+            </div>
+            <div class="col-2">
+                <button type="submit" name="run_all" class="btn btn-primary">Send flows></button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-2 custom-select-column">
+                <div class="form-group">
+                    <label for="node_name">Node Name</label>
+                    <input type="text" class="form-control" name="node_name" id="node_name">
+                </div>
+                <button type="submit" class="btn btn-primary" name="new_node_form" id="new-node-btn">Create New Node >
+                </button>
+                <hr>
+                <h3> Select Node</h3>
+                <hr>
+                <ul class="list-group list-group-flush">
+                    {% for nodeIt in all_nodes %}
+                        <a href="/vm_overview_on_off/{{ nodeIt.id }}/" class="list-group-item
+                  {% if nodeIt.id == nodeId %}
+                   selected-a
+                   {% else %}
+                   unselected-a
+                   {% endif %}
+                    ">Node {{ nodeIt.name }}
+                        </a>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% if nodeId != 0 %}
+                <div class="col-2 custom-select-column">
+                    <h3> Flows of current Node</h3>
+                    <hr>
+                    <ul class="list-group list-group-flush">
+                        {% for flowIt in all_flow_on_off_node %}
+                            <a href="/vm_overview_on_off/{{ flowIt.id }}/" class="list-group-item
+{#                      {% if flowIt == flowId %}#}
+{#                       selected-a#}
+{#                       {% else %}#}
+                       unselected-a
+{#                       {% endif %}#}
+                        ">Flow :{{ flowIt.flow.name }}
+                                <br/>
+                                Node Destination : {{ flowIt.to_on_off.name }}
+                            </a>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-5 d-flex flex-wrap align-content-start custom-select-column">
+                    <div class="row flex-grow custom-select-column-header">
+                        <div class="col-6 custom-select-column">
+                            <div class="form-group">
+                                <label for="flows_to_add">Select Flow to add:</label>
+                                <select class="form-control" name="flowToAdd" id="flows_to_add" onchange="">
+                                    {% for flowIt in all_flow_on_off %}
+                                        <option value="{{ flowIt.id }}"> {{ flowIt.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="node_destination">Select Node to send to:</label>
+                                <select class="form-control" name="nodeTo" id="node_destination" onchange="">
+                                    {% for nodeIt in all_nodes %}
+                                        <option value="{{ nodeIt.id }}"> {{ nodeIt.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <button type="submit" class="btn btn-primary" name="new_node_flow_form" id="new-node-btn">
+                                Add flow >
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <h2> Create a new node or select one to add flows to it</h2>
+            {% endif %}
+        </div>
+    </form>
+
+
+{% endblock %}

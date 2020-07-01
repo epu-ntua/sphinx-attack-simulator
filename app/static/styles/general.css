@@ -16,6 +16,14 @@ html, body {
 .departure-group{
     display: none;
 }
+
+.doff-group{
+    display: none;
+}
+
+.don-group{
+    display: none;
+}
 .start-hidden{
     display: none;
 }

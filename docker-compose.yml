@@ -3,7 +3,7 @@ services:
 
   node1:
     #image:pelekhs/behaviour_node
-    container_name: node1
+    container_name: sender
     build:
       context: .
       dockerfile: Dockerfile-attacker
@@ -14,7 +14,7 @@ services:
 
   node2:
     #image:pelekhs/behaviour_node
-    container_name: node2
+    container_name: receiver
     build:
       context: .
       dockerfile: Dockerfile-victim

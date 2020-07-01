@@ -1,0 +1,239 @@
+{% extends "base.html" %}
+
+{% block script %}
+    <script>
+        function changeDon(sel) {
+            allDivs = document.getElementsByClassName("don-group");
+            for (var i = 0; i < allDivs.length; i++) {
+                allDivs[i].style.display = 'none';
+            }
+
+            document.getElementById("don_distributions_value_1").style.display = "block";
+            document.getElementById("don_distributions_value_2").style.display = "none";
+
+            document.getElementById("don_title").innerText = sel;
+            switch (sel) {
+                case "uniform":
+                    {#document.getElementById("departure_min_rate_group").style.display = "block";#}
+                    {#document.getElementById("departure_max_rate_group").style.display = "block";#}
+                    document.getElementById("don_distributions_value_2").style.display = "block";
+                    break;
+                case "exponential":
+                    document.getElementById("don_mean_group").style.display = "block";
+                    break;
+                case "poisson":
+                    document.getElementById("don_mean_group").style.display = "block";
+                    break;
+                case "pareto":
+                    document.getElementById("don_shape_group").style.display = "block";
+                    document.getElementById("don_scale_group").style.display = "block";
+                    document.getElementById("don_distributions_value_2").style.display = "block";
+                    break;
+                case "weibull":
+                    document.getElementById("don_shape_group").style.display = "block";
+                    document.getElementById("don_scale_group").style.display = "block";
+                    document.getElementById("don_distributions_value_2").style.display = "block";
+                    break;
+            }
+        }
+
+        function changeDoff(sel) {
+            allDivs = document.getElementsByClassName("doff-group");
+            for (var i = 0; i < allDivs.length; i++) {
+                allDivs[i].style.display = 'none';
+            }
+            document.getElementById("doff_distributions_value_1").style.display = "block";
+            document.getElementById("doff_distributions_value_2").style.display = "none";
+
+            document.getElementById("doff_title").innerText = sel + "distribution";
+            switch (sel) {
+                case "uniform":
+
+                    document.getElementById("doff_distributions_value_2").style.display = "block";
+                    break;
+                case "exponential":
+                    document.getElementById("doff_mean_group").style.display = "block";
+                    break;
+                case "poisson":
+                    document.getElementById("doff_mean_group").style.display = "block";
+                    break;
+                case "pareto":
+                    document.getElementById("doff_shape_group").style.display = "block";
+                    document.getElementById("doff_scale_group").style.display = "block";
+                    document.getElementById("doff_distributions_value_2").style.display = "block";
+                    break;
+                case "weibull":
+                    document.getElementById("doff_shape_group").style.display = "block";
+                    document.getElementById("doff_scale_group").style.display = "block";
+                    document.getElementById("doff_distributions_value_2").style.display = "block";
+                    break;
+            }
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <form action="/on_off_flow_creation/{{ groupFlowId }}/" , method="post">
+        <div class="row d-flex information-bar">
+            <div class="col-10">
+                <h5> Create New Group Flow</h5>
+            </div>
+            {#            {% if asset != -1 %}#}
+            <div class="col-2">
+                <button type="submit" name="new_group_flow_form" class="btn btn-primary">Submit Flow ></button>
+            </div>
+            {#            {% endif %}#}
+        </div>
+        <div class="row">
+            <div class="col-2 custom-select-column">
+                {% if groupFlowId != 0 %}
+                    <a href="/on_off_flow_creation/0/" class="btn btn-primary " id="new-flow-btn">Create New Flow ></a>
+                    <hr>
+                {% endif %}
+                <h3> Select Group Flow</h3>
+                <hr>
+                <ul class="list-group list-group-flush">
+                    {% for flowIt in flowArray %}
+                        <a href="/flow_creation/{{ groupFlowId }}/" class="list-group-item
+                  {% if flowIt == groupFlowId %}
+                   selected-a
+                   {% else %}
+                   unselected-a
+                   {% endif %}
+                    ">Flow {{ flowIt.name }}
+                        </a>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-10 d-flex flex-wrap align-content-start custom-select-column">
+                {% if groupFlowId == 0 %}
+                    <h2> Create new Flow or select a flow to update it</h2>
+                {% else %}
+                    <h2> Update this flow or select a new one to update</h2>
+                {% endif %}
+                <div class="row flex-grow custom-select-column-header">
+                    <div class="col-6 custom-select-column">
+                        <div class="form-group row">
+                            <label for="name">Flow Name</label>
+                            <input type="text" class="form-control" name="name" id="name" placeholder="Flow name">
+                        </div>
+                        <div class="form-group row">
+                            <label for="protocol">Protocol</label>
+                            <select class="form-control" name="protocol" id="protocol">
+                                <option>tcp</option>
+                                <option>udp</option>
+                            </select>
+                        </div>
+                        <div class="form-group row">
+                            <label for="ip_version">IP Version</label>
+                            <select class="form-control" name="ip_version" id="ip_version">
+                                <option>ipv4</option>
+                                <option>ipv6</option>
+                            </select>
+                        </div>
+                        <div class="form-group row">
+                            <label for="don_distributions">Don Duration (Bytes)</label>
+                            <select class="form-control" id="don_distributions"
+                                    name="don_distributions"
+                                    onchange="changeDon(this.value)">
+                                <option>uniform</option>
+                                <option>exponential</option>
+                                <option>poisson</option>
+                                <option>pareto</option>
+                                <option>weibull</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="don_minimum_permitted">Don Minimum Permitted (bytes)</label>
+                            <input type="text" class="form-control" name="don_minimum_permitted"
+                                   id="don_minimum_permitted" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="don_maximum_permitted">Don Maximum Permitted (bytes)</label>
+                            <input type="text" class="form-control" name="don_maximum_permitted"
+                                   id="don_maximum_permitted" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="doff_distributions">Doff Inter Duration (Nanoseconds)</label>
+                            <select class="form-control" id="doff_distributions" name="doff_distributions"
+                                    onchange="changeDoff(this.value)">
+                                <option>uniform</option>
+                                <option>exponential</option>
+                                <option>poisson</option>
+                                <option>pareto</option>
+                                <option>weibull</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="doff_minimum_permitted">Doff Minimum Permitted (Nanoseconds)</label>
+                            <input type="text" class="form-control" name="doff_minimum_permitted"
+                                   id="doff_minimum_permitted" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="doff_maximum_permitted">Doff Maximum Permitted (Nanoseconds)</label>
+                            <input type="text" class="form-control" name="doff_maximum_permitted"
+                                   id="doff_maximum_permitted" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="delay">Delay (Nanoseconds)</label>
+                            <input type="text" class="form-control" name="delay" id="delay" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="number_of_flow">Number of Flow (n<999999) n = 1000000 means infinite</label>
+                            <input type="text" class="form-control" name="number_of_flow" id="number_of_flow"
+                                   placeholder="">
+                        </div>
+                    </div>
+                    <div class="col6">
+                        <h3> Don Duration Details</h3>
+                        <h2 id=don_title> No selected Distribution</h2>
+                        <div class="form-group don-group" id="don_mean_group">
+                            <label for="name">Mean</label>
+                        </div>
+
+                        <div class="form-group don-group" id="don_shape_group">
+                            <label for="name">Shape</label>
+                        </div>
+
+                        <input type="text" class="form-control start-hidden"
+                               name="don_distributions_value_1"
+                               id="don_distributions_value_1">
+
+                        <div class="form-group don-group" id="don_scale_group">
+                            <label for="name">Scale</label>
+                        </div>
+
+                        <input type="text" class="form-control start-hidden"
+                               name="don_distributions_value_2"
+                               id="don_distributions_value_2">
+                        <hr/>
+                        <h3> Doff Duration Details</h3>
+                        <h2 id="doff_title"> No selected Distribution</h2>
+
+                        <div class="form-group doff-group" id="doff_mean_group">
+                            <label for="name">Mean</label>
+                        </div>
+
+                        <div class="form-group doff-group" id="doff_shape_group">
+                            <label for="name">Shape</label>
+                        </div>
+
+                        <input type="text" class="form-control start-hidden" name="doff_distributions_value_1"
+                               id="doff_distributions_value_1">
+
+                        <div class="form-group doff-group" id="doff_scale_group">
+                            <label for="name">Scale</label>
+                        </div>
+
+                        <input type="text" class="form-control start-hidden" name="doff_distributions_value_2"
+                               id="doff_distributions_value_2">
+                        <hr/>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </form>
+
+
+{% endblock %}

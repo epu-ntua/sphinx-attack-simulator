@@ -16,15 +16,21 @@
 </head>
 <body>
 <nav class="navbar  navbar-expand-lg navbar-dark bg-dark">
-    <a class="navbar-brand" href="http://0.0.0.0:5002/home">User behavior emulator</a>
+    <a class="navbar-brand" href="http://{{ serverAddress }}:{{ serverPort }}/home">User behavior emulator</a>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <div class="navbar-nav mr-auto">
         <li class="nav-item active">
-            <a class="nav-link" href="http://0.0.0.0:5002/flow_creation">Create Flows</a>
+            <a class="nav-link" href="http://{{ serverAddress }}:{{ serverPort }}/on_off_flow_creation">Create On/Off Flows</a>
         </li>
         <li class="nav-item active">
-            <a class="nav-link" href="http://0.0.0.0:5002/vm_overview">Manage network nodes</a>
+            <a class="nav-link" href="http://{{ serverAddress }}:{{ serverPort }}/flow_creation">Create Flows</a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="http://{{ serverAddress }}:{{ serverPort }}/vm_overview">Manage network nodes</a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="http://{{ serverAddress }}:{{ serverPort }}/vm_overview_on_off">Manage On/Off nodes</a>
         </li>
 {#        <li class="nav-item">#}
 {#            <a class="nav-link" href="http://0.0.0.0:5002/shutdown">Shutdown</a>#}

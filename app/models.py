@@ -5,6 +5,11 @@ class protocolEnum(Enum):
     tcp = "tcp"
     udp = "udp"
 
+class InternetProtocolEnum(Enum):
+    ipv4 = "ipv4"
+    ipv6 = "ipv6"
+
+
 class packetSizeDistributionsEnum(Enum):
     constant = "constant"
     uniform = "uniform"
@@ -27,10 +32,29 @@ class interdepartureIntervalDistributionEnum(Enum):
     gamma = "gamma"
     weibull = "weibull"
 
+class OnOffEnum(Enum):
+    uniform = "uniform"
+    exponential = "exponential"
+    poisson = "poisson"
+    pareto = "pareto"
+    weibull = "weibull"
+
 class FlowToNode(db.Model):
     __tablename__ = 'FlowToNode'
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     fk_flow = db.Column(db.Integer, db.ForeignKey('flows.id'))
+    fk_node_from = db.Column(db.Integer, db.ForeignKey('nodes.id'))
+    fk_node_to = db.Column(db.Integer, db.ForeignKey('nodes.id'))
+    # Need to apply active functionality
+    active = db.Column(db.Binary)
+
+    def __repr__(self):
+        return '<Flow {} , From {} ,To {}>'.format(self.fk_flow , self.fk_node_from , self.fk_node_to)
+
+class FlowOnOffToNode(db.Model):
+    __tablename__ = 'FlowOnOffToNode'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    fk_flow = db.Column(db.Integer, db.ForeignKey('flows_on_off.id'))
     fk_node_from = db.Column(db.Integer, db.ForeignKey('nodes.id'))
     fk_node_to = db.Column(db.Integer, db.ForeignKey('nodes.id'))
     # Need to apply active functionality
@@ -50,6 +74,9 @@ class Nodes(db.Model):
 
     node_to = db.relationship('FlowToNode' , backref = "to", primaryjoin=id==FlowToNode.fk_node_to)
     node_from = db.relationship('FlowToNode' , backref = "from", primaryjoin=id==FlowToNode.fk_node_from)
+
+    node_to_on_off = db.relationship('FlowOnOffToNode', backref="to_on_off", primaryjoin=id == FlowOnOffToNode.fk_node_to)
+    node_from_on_off = db.relationship('FlowOnOffToNode', backref="from_on_off", primaryjoin=id == FlowOnOffToNode.fk_node_from)
     def __repr__(self):
         return '<Node {}>'.format(self.name)
 
@@ -67,30 +94,52 @@ class Flows(db.Model):
     packet_size_distributions_value_1 =  db.Column(db.Float)
     packet_size_distributions_value_2 =  db.Column(db.Float)
 
-    # packet_size_pkt_size = db.Column(db.Float)
-    # packet_size_min_pkt_size = db.Column(db.Float)
-    # packet_size_max_pkt_size = db.Column(db.Float)
-    # packet_size_average_pkt_size = db.Column(db.Float)
-    # packet_size_mean = db.Column(db.Float)
-    # packet_size_std_dev = db.Column(db.Float)
-    # packet_size_shape = db.Column(db.Float)
-    # packet_size_scale = db.Column(db.Float)
 
     interdeparture_interval_distribution = db.Column(db.Enum(interdepartureIntervalDistributionEnum))
 
     interdeparture_interval_distribution_value_1 = db.Column(db.Float)
     interdeparture_interval_distribution_value_2 = db.Column(db.Float)
-    # interdeparture_rate = db.Column(db.Float)
-    # interdeparture_min_rate = db.Column(db.Float)
-    # interdeparture_max_rate = db.Column(db.Float)
-    # interdeparture_mean = db.Column(db.Float)
-    # interdeparture_std_dev = db.Column(db.Float)
-    # interdeparture_shape = db.Column(db.Float)
-    # interdeparture_scale = db.Column(db.Float)
+
 
     def __repr__(self):
         return 'Flow {}'.format(self.name)
 
+
+
+class FlowsOnOff(db.Model):
+    __tablename__ = 'flows_on_off'
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    node_target = db.relationship('FlowOnOffToNode', backref = 'flow', primaryjoin=id==FlowOnOffToNode.fk_flow)
+    # node_source = db.relationship('FlowToNode', backref = 'flow', primaryjoin=id==FlowToNode.fk_flow)
+
+    name = db.Column(db.String)
+
+    protocol = db.Column(db.Enum(protocolEnum))
+    delay = db.Column(db.Integer)  # Delay in nanosec
+    ip_version = db.Column(db.Enum(InternetProtocolEnum))
+
+    # Number of flow less that 999999. If equals 1000000 then it is infinite
+    number_of_flow =db.Column(db.Integer)
+
+    # All units in the distributions are nanoseconds
+    don_distributions = db.Column(db.Enum(OnOffEnum))
+
+    don_distributions_value_1 = db.Column(db.Float)
+    don_distributions_value_2 = db.Column(db.Float)
+
+    don_minimum_permitted = db.Column(db.Integer)
+    don_maximum_permitted = db.Column(db.Integer)
+
+    doff_distributions = db.Column(db.Enum(OnOffEnum))
+
+    doff_distributions_value_1 =  db.Column(db.Float)
+    doff_distributions_value_2 =  db.Column(db.Float)
+
+    doff_minimum_permitted = db.Column(db.Integer)
+    doff_maximum_permitted = db.Column(db.Integer)
+
+    def __repr__(self):
+        return 'Flow {}'.format(self.name)
 
 #class
 # 
