@@ -18,6 +18,18 @@ def entry_page():
     return render_template('entry_page.html')
 
 
+@app.route('/tcp_flood/', methods=['GET', 'POST'])
+def tcp_flood():
+    if request.method == 'POST':
+        if "run_attack" in request.form:
+            tcp_flood_attack( request.form.get("node_target"),  request.form.get("target_port"))
+            return redirect("/tcp_flood/")
+    else:
+        all_nodes = get_all_nodes()
+
+        return render_template('tcp_flood.html', all_nodes = all_nodes)
+
+
 @app.route('/vm_overview/', defaults={"nodeId": 0})
 @app.route('/vm_overview/<int:nodeId>/', methods=['GET', 'POST'])
 def vm_overview(nodeId):

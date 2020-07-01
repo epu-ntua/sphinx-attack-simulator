@@ -277,7 +277,8 @@ def run_flows_on_off():
 def tcp_flood_attack(receiver, port):
     command = "docker exec sender  hping3 -c 15000 -d 120 -S -w 64 -p " + port + " --flood --rand-source " + receiver
     flash('Activating TCP flood attack: {}'.format(command))
-    os.system(command)
+    print(command)
+    # os.system(command)
 
 # def create_command_on_off():
 

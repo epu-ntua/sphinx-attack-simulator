@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+
+    <form action="/tcp_flood/" , method="post">
+
+        </br>
+        <label for="target_port">Target Port</label>
+        <input type="text" class="form-control" name="target_port" id="target_port">
+
+        <label for="node_target">Select Node to target:</label>
+        <select class="form-control" name="node_target" id="node_target" onchange="">
+            {% for nodeIt in all_nodes %}
+                <option value="{{ nodeIt.name }}"> {{ nodeIt.name }}</option>
+            {% endfor %}
+        </select>
+        </br>
+        <button type="submit" name="run_attack" class="btn btn-primary">Deploy TCP Attack></button>
+    </form>
+
+{% endblock %}
