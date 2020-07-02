@@ -27,6 +27,21 @@ html, body {
 .start-hidden{
     display: none;
 }
+
+.nav-custom{
+    background-color: #00a79d;
+    padding: 0 !important;
+}
+
+.logo-custom{
+    background-color: #444444;
+    color: #00a79d !important;
+    padding-right: 10px;
+}
+
+.btn-primary{
+    background-color: #00a79d;
+}
 /*-------------*/
 .custom-card {
     width: 22%;
