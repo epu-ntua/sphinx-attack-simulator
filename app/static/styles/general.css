@@ -30,7 +30,7 @@ html, body {
 
 .nav-custom{
     background-color: #00a79d;
-    padding: 0 !important;
+    padding: 0 !important;  /*if smth does not change (not good practice)*/
 }
 
 .logo-custom{

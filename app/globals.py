@@ -1,2 +1,2 @@
-serverAddress = "127.0.0.1"
-serverPort = "5000"
+serverAddress = "0.0.0.0"
+serverPort = "5002"

@@ -11,7 +11,7 @@
             document.getElementById("don_distributions_value_1").style.display = "block";
             document.getElementById("don_distributions_value_2").style.display = "none";
 
-            document.getElementById("don_title").innerText = sel;
+            document.getElementById("don_title").innerText = sel + " distribution";
             switch (sel) {
                 case "uniform":
                     {#document.getElementById("departure_min_rate_group").style.display = "block";#}
@@ -45,13 +45,9 @@
             document.getElementById("doff_distributions_value_1").style.display = "block";
             document.getElementById("doff_distributions_value_2").style.display = "none";
 
-            document.getElementById("doff_title").innerText = sel + "distribution";
+            document.getElementById("doff_title").innerText = sel + " distribution";
             switch (sel) {
                 case "uniform":
-
-                    document.getElementById("doff_distributions_value_2").style.display = "block";
-                    break;
-                case "exponential":
                     document.getElementById("doff_mean_group").style.display = "block";
                     break;
                 case "poisson":
@@ -76,7 +72,7 @@
     <form action="/on_off_flow_creation/{{ groupFlowId }}/" , method="post">
         <div class="row d-flex information-bar">
             <div class="col-10">
-                <h5> Create New Group Flow</h5>
+                <h6> On | Off menu</h6>
             </div>
             {#            {% if asset != -1 %}#}
             <div class="col-2">
@@ -90,7 +86,7 @@
                     <a href="/on_off_flow_creation/0/" class="btn btn-primary " id="new-flow-btn">Create New Flow ></a>
                     <hr>
                 {% endif %}
-                <h3> Select Group Flow</h3>
+                <h4> On | Off sources tuning</h4>
                 <hr>
                 <ul class="list-group list-group-flush">
                     {% for flowIt in flowArray %}
@@ -107,32 +103,32 @@
             </div>
             <div class="col-10 d-flex flex-wrap align-content-start custom-select-column">
                 {% if groupFlowId == 0 %}
-                    <h2> Create new Flow or select a flow to update it</h2>
+                    <h4> Tune your on | off flows:</h4>
                 {% else %}
                     <h2> Update this flow or select a new one to update</h2>
                 {% endif %}
                 <div class="row flex-grow custom-select-column-header">
                     <div class="col-6 custom-select-column">
-                        <div class="form-group row">
+                        <div class="form-group">
                             <label for="name">Flow Name</label>
                             <input type="text" class="form-control" name="name" id="name" placeholder="Flow name">
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group">
                             <label for="protocol">Protocol</label>
                             <select class="form-control" name="protocol" id="protocol">
                                 <option>tcp</option>
                                 <option>udp</option>
                             </select>
                         </div>
-                        <div class="form-group row">
+                        <div class="form-group">
                             <label for="ip_version">IP Version</label>
                             <select class="form-control" name="ip_version" id="ip_version">
                                 <option>ipv4</option>
                                 <option>ipv6</option>
                             </select>
                         </div>
-                        <div class="form-group row">
-                            <label for="don_distributions">Don Duration (Bytes)</label>
+                        <div class="form-group">
+                            <label for="don_distributions">Don distribution - Flow Duration (bytes)</label>
                             <select class="form-control" id="don_distributions"
                                     name="don_distributions"
                                     onchange="changeDon(this.value)">
@@ -144,17 +140,17 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="don_minimum_permitted">Don Minimum Permitted (bytes)</label>
+                            <label for="don_minimum_permitted">Don distribution - Minimum Permitted Value (bytes)</label>
                             <input type="text" class="form-control" name="don_minimum_permitted"
                                    id="don_minimum_permitted" placeholder="">
                         </div>
                         <div class="form-group">
-                            <label for="don_maximum_permitted">Don Maximum Permitted (bytes)</label>
+                            <label for="don_maximum_permitted">Don distribution - Maximum Permitted Value (bytes)</label>
                             <input type="text" class="form-control" name="don_maximum_permitted"
                                    id="don_maximum_permitted" placeholder="">
                         </div>
                         <div class="form-group">
-                            <label for="doff_distributions">Doff Inter Duration (Nanoseconds)</label>
+                            <label for="doff_distributions">Doff distribution - Inter Flow Duration (nanosec)</label>
                             <select class="form-control" id="doff_distributions" name="doff_distributions"
                                     onchange="changeDoff(this.value)">
                                 <option>uniform</option>
@@ -165,34 +161,34 @@
                             </select>
                         </div>
                         <div class="form-group">
-                            <label for="doff_minimum_permitted">Doff Minimum Permitted (Nanoseconds)</label>
+                            <label for="doff_minimum_permitted">Doff distribution - Minimum Permitted Value (nanosec)</label>
                             <input type="text" class="form-control" name="doff_minimum_permitted"
                                    id="doff_minimum_permitted" placeholder="">
                         </div>
                         <div class="form-group">
-                            <label for="doff_maximum_permitted">Doff Maximum Permitted (Nanoseconds)</label>
+                            <label for="doff_maximum_permitted">Doff distribution - Maximum Permitted Value (nanosec)</label>
                             <input type="text" class="form-control" name="doff_maximum_permitted"
                                    id="doff_maximum_permitted" placeholder="">
                         </div>
                         <div class="form-group">
-                            <label for="delay">Delay (Nanoseconds)</label>
+                            <label for="delay">Delay (Nanosec)</label>
                             <input type="text" class="form-control" name="delay" id="delay" placeholder="">
                         </div>
                         <div class="form-group">
-                            <label for="number_of_flow">Number of Flow (n<999999) n = 1000000 means infinite</label>
+                            <label for="number_of_flow">Number of Flows (< = 999999, 1000000 is infinite)</label>
                             <input type="text" class="form-control" name="number_of_flow" id="number_of_flow"
                                    placeholder="">
                         </div>
                     </div>
                     <div class="col6">
-                        <h3> Don Duration Details</h3>
-                        <h2 id=don_title> No selected Distribution</h2>
+                        <h4>  Flow duration parameters</h4>
+                        <h6 id=don_title> Please select Don distribution to proceed with parameter selection</h6>
                         <div class="form-group don-group" id="don_mean_group">
-                            <label for="name">Mean</label>
+                            <b><label for="name"> Mean</label></b>
                         </div>
 
                         <div class="form-group don-group" id="don_shape_group">
-                            <label for="name">Shape</label>
+                            <b><label for="name"> Shape</label></b>
                         </div>
 
                         <input type="text" class="form-control start-hidden"
@@ -200,29 +196,29 @@
                                id="don_distributions_value_1">
 
                         <div class="form-group don-group" id="don_scale_group">
-                            <label for="name">Scale</label>
+                            <b><label for="name"> Scale</label></b>
                         </div>
 
                         <input type="text" class="form-control start-hidden"
                                name="don_distributions_value_2"
                                id="don_distributions_value_2">
                         <hr/>
-                        <h3> Doff Duration Details</h3>
-                        <h2 id="doff_title"> No selected Distribution</h2>
+                        <h4>  Inter-train duration parameters</h4>
+                        <h6 id="doff_title">    Please select Doff distribution to proceed with parameter selection</h6>
 
                         <div class="form-group doff-group" id="doff_mean_group">
-                            <label for="name">Mean</label>
+                            <b><label for="name">   Mean</label></b>
                         </div>
 
                         <div class="form-group doff-group" id="doff_shape_group">
-                            <label for="name">Shape</label>
+                            <b><label for="name">  Shape</label></b>
                         </div>
 
                         <input type="text" class="form-control start-hidden" name="doff_distributions_value_1"
                                id="doff_distributions_value_1">
 
                         <div class="form-group doff-group" id="doff_scale_group">
-                            <label for="name">Scale</label>
+                            <b><label for="name">  Scale</label></b>
                         </div>
 
                         <input type="text" class="form-control start-hidden" name="doff_distributions_value_2"

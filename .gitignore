@@ -18,6 +18,9 @@ _mailinglist
 .idea/
 docs/_build/
 .vscode
+app/__pycache__/utils.cpython-38.pyc
+app/__pycache__/routes.cpython-38.pyc
+app/__pycache__/models.cpython-38.pyc
 
 # Coverage reports
 htmlcov/

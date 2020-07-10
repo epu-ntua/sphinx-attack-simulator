@@ -62,11 +62,37 @@ def add_new_on_off_flow(name, protocol, delay, ip_version, number_of_flow, don_m
                         don_distributions_value_2,
                         doff_distributions, doff_distributions_value_1,
                         doff_distributions_value_2):
+
+    if don_distributions_value_1 == "":
+        don_distributions_value_1 = -1
+
+    if doff_distributions_value_1 == "":
+        doff_distributions_value_1 = -1
+
     if don_distributions_value_2 == "":
-        don_distributions_value_2 = 0
+        don_distributions_value_2 = -1
 
     if doff_distributions_value_2 == "":
-        doff_distributions_value_2 = 0
+        doff_distributions_value_2 = -1
+
+    if doff_minimum_permitted == "":
+        doff_minimum_permitted = 0
+
+    if doff_maximum_permitted == "":
+        doff_maximum_permitted = -1
+
+    if don_minimum_permitted == "":
+        don_minimum_permitted = 0
+
+    if don_maximum_permitted == "":
+        don_maximum_permitted = -1
+
+    if number_of_flow == "":
+        number_of_flow = -1
+
+    if delay == "":
+        delay = -1
+
 
     new_flow = FlowsOnOff(name=name, protocol=protocol, delay=delay, ip_version=ip_version,
                           don_minimum_permitted=don_minimum_permitted,
@@ -180,26 +206,26 @@ def create_command(flow, node_from, node_to):
 
 
 def create_on_off_command(group_flow, node_from, node_to):
-    # delay = group_flow.delay if group_flow.delay else 0
-    command = "docker exec " + str(node_from.name) + " ./sourceonoff/sourceonoff --verbose "
 
-    if group_flow.protocol == "tcp":
-        command = command + "-t "
-    elif group_flow.protocol == "udp":
+    command = "docker exec " + str(node_from.name) + " ./sourcesonoff/sourcesonoff --verbose "
+
+    if group_flow.protocol.value and group_flow.protocol.value == "udp":
         command = command + "-T "
+    else:
+        command = command + "-t "
 
     command = command + "--destination=" + str(node_to.name) + " "
 
-    if group_flow.ip_version == "ipv4":
-        command = command + "-4 "
-    elif group_flow.ip_version == "ipv6":
+    if group_flow.ip_version.value == "ipv6":
         command = command + "-6 "
+    else:
+        command = command + "-4 "
 
     command = command + "--don-type="
 
-    if group_flow.don_distributions.value == "uniform":
-        command = command + "Uniform"
-    elif group_flow.don_distributions.value == "exponential":
+    #if group_flow.don_distributions.value == "uniform":
+    #    command = command + "Uniform"
+    if group_flow.don_distributions.value == "exponential":
         command = command + "Exponential --don-lambda=" + str(group_flow.don_distributions_value_1) + " "
     elif group_flow.don_distributions.value == "weibull":
         command = command + "Weibull --don-k=" + str(group_flow.don_distributions_value_1) + " --don-lambda=" + str(group_flow.don_distributions_value_2) + " "
@@ -208,16 +234,18 @@ def create_on_off_command(group_flow, node_from, node_to):
     elif group_flow.don_distributions.value == "poisson":
         command = command + "Poisson --don-lambda=" + str(group_flow.don_distributions_value_1) + " "
     else:
-        print(group_flow.don_distributions)
+        command = command + "Uniform"
 
-    command = command + "--don-min=" + str(group_flow.don_minimum_permitted) + " --don-max=" + str(
-        group_flow.don_maximum_permitted) + " "
+    if group_flow.don_maximum_permitted != -1:
+        command = command + "--don-min=" + str(group_flow.don_minimum_permitted) + " --don-max=" + str(
+            group_flow.don_maximum_permitted) + " "
+    else:
+        command = command + "--don-min=" + str(group_flow.don_minimum_permitted) + " "
 
     command = command + "--doff-type="
-
-    if group_flow.doff_distributions.value == "uniform":
-        command = command + "Uniform"
-    elif group_flow.doff_distributions.value == "exponential":
+    #if group_flow.doff_distributions.value == "uniform":
+    #    command = command + "Uniform"
+    if group_flow.doff_distributions.value == "exponential":
         command = command + "Exponential --doff-lambda=" + str(group_flow.doff_distributions_value_1) + " "
     elif group_flow.doff_distributions.value == "weibull":
         command = command + "Weibull --doff-k=" + str(group_flow.doff_distributions_value_1) + " --doff-lambda=" + str(group_flow.doff_distributions_value_2) + " "
@@ -226,12 +254,23 @@ def create_on_off_command(group_flow, node_from, node_to):
     elif group_flow.doff_distributions.value == "poisson":
         command = command + "Poisson --doff-lambda=" + str(group_flow.doff_distributions_value_1) + " "
     else:
-        print(group_flow.doff_distributions)
+        command = command + "Uniform"
 
-    command = command + "--don-min=" + str(group_flow.doff_minimum_permitted) + " --don-max=" + str(
-        group_flow.doff_maximum_permitted) + " "
+    # do not add prefix if not filled
+    if  group_flow.doff_maximum_permitted != -1:
+        command = command + "--don-min=" + str(group_flow.doff_minimum_permitted) + " --don-max=" + str(
+            group_flow.doff_maximum_permitted) + " "
+    else:
+        command = command + "--don-min=" + str(group_flow.doff_minimum_permitted) + " "
 
-    command = command + "--turns=" + str(group_flow.number_of_flow)
+    if group_flow.number_of_flow != -1:
+        command = command + "--turns=" + str(group_flow.number_of_flow) + " "
+
+    if group_flow.delay != -1:
+        command = command + "-D " + str(group_flow.delay)
+    # background
+    # command = command + " &"
+
     return command
 
 
@@ -268,14 +307,13 @@ def run_flows_on_off():
                 node_to = Nodes.query.filter(Nodes.id == flow_con.fk_node_to).all()
                 group_flow = FlowsOnOff.query.filter(FlowsOnOff.id == flow_con.id).first()
                 command = create_on_off_command(group_flow, node_from, node_to[0])
-
                 print(command)
                 flash('Sent command to daemon machine: {}'.format(command))
                 os.system(command)
 
 
 def tcp_flood_attack(receiver, port):
-    command = "docker exec sender  hping3 -c 15000 -d 120 -S -w 64 -p " + port + " --flood --rand-source " + receiver
+    command = "docker exec sender hping3 -c 150000 -d 120 -S -w 64 -p " + port + " --flood --rand-source " + receiver
     flash('Activating TCP flood attack: {}'.format(command))
     print(command)
     os.system(command)
