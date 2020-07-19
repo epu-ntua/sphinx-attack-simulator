@@ -22,7 +22,7 @@ def entry_page():
 def tcp_flood():
     if request.method == 'POST':
         if "run_attack" in request.form:
-            tcp_flood_attack( request.form.get("node_target"),  request.form.get("target_port"))
+            flood_attack( request.form.get("node_target"),  request.form.get("target_port") , request.form.get("attack_type"))
             return redirect("/tcp_flood/")
     else:
         all_nodes = get_all_nodes()

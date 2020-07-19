@@ -62,7 +62,6 @@ def add_new_on_off_flow(name, protocol, delay, ip_version, number_of_flow, don_m
                         don_distributions_value_2,
                         doff_distributions, doff_distributions_value_1,
                         doff_distributions_value_2):
-
     if don_distributions_value_1 == "":
         don_distributions_value_1 = -1
 
@@ -92,7 +91,6 @@ def add_new_on_off_flow(name, protocol, delay, ip_version, number_of_flow, don_m
 
     if delay == "":
         delay = -1
-
 
     new_flow = FlowsOnOff(name=name, protocol=protocol, delay=delay, ip_version=ip_version,
                           don_minimum_permitted=don_minimum_permitted,
@@ -206,7 +204,6 @@ def create_command(flow, node_from, node_to):
 
 
 def create_on_off_command(group_flow, node_from, node_to):
-
     command = "docker exec " + str(node_from.name) + " ./sourcesonoff/sourcesonoff --verbose "
 
     if group_flow.protocol.value and group_flow.protocol.value == "udp":
@@ -223,14 +220,16 @@ def create_on_off_command(group_flow, node_from, node_to):
 
     command = command + "--don-type="
 
-    #if group_flow.don_distributions.value == "uniform":
+    # if group_flow.don_distributions.value == "uniform":
     #    command = command + "Uniform"
     if group_flow.don_distributions.value == "exponential":
         command = command + "Exponential --don-lambda=" + str(group_flow.don_distributions_value_1) + " "
     elif group_flow.don_distributions.value == "weibull":
-        command = command + "Weibull --don-k=" + str(group_flow.don_distributions_value_1) + " --don-lambda=" + str(group_flow.don_distributions_value_2) + " "
+        command = command + "Weibull --don-k=" + str(group_flow.don_distributions_value_1) + " --don-lambda=" + str(
+            group_flow.don_distributions_value_2) + " "
     elif group_flow.don_distributions.value == "pareto":
-        command = command + "Pareto --don-alpha=" + str(group_flow.don_distributions_value_1) + " --don-xm=" + str(group_flow.don_distributions_value_2) + " "
+        command = command + "Pareto --don-alpha=" + str(group_flow.don_distributions_value_1) + " --don-xm=" + str(
+            group_flow.don_distributions_value_2) + " "
     elif group_flow.don_distributions.value == "poisson":
         command = command + "Poisson --don-lambda=" + str(group_flow.don_distributions_value_1) + " "
     else:
@@ -243,21 +242,23 @@ def create_on_off_command(group_flow, node_from, node_to):
         command = command + "--don-min=" + str(group_flow.don_minimum_permitted) + " "
 
     command = command + "--doff-type="
-    #if group_flow.doff_distributions.value == "uniform":
+    # if group_flow.doff_distributions.value == "uniform":
     #    command = command + "Uniform"
     if group_flow.doff_distributions.value == "exponential":
         command = command + "Exponential --doff-lambda=" + str(group_flow.doff_distributions_value_1) + " "
     elif group_flow.doff_distributions.value == "weibull":
-        command = command + "Weibull --doff-k=" + str(group_flow.doff_distributions_value_1) + " --doff-lambda=" + str(group_flow.doff_distributions_value_2) + " "
+        command = command + "Weibull --doff-k=" + str(group_flow.doff_distributions_value_1) + " --doff-lambda=" + str(
+            group_flow.doff_distributions_value_2) + " "
     elif group_flow.doff_distributions.value == "pareto":
-        command = command + "Pareto --doff-alpha=" + str(group_flow.doff_distributions_value_1) + " --doff-xm=" + str(group_flow.doff_distributions_value_2) + " "
+        command = command + "Pareto --doff-alpha=" + str(group_flow.doff_distributions_value_1) + " --doff-xm=" + str(
+            group_flow.doff_distributions_value_2) + " "
     elif group_flow.doff_distributions.value == "poisson":
         command = command + "Poisson --doff-lambda=" + str(group_flow.doff_distributions_value_1) + " "
     else:
         command = command + "Uniform"
 
     # do not add prefix if not filled
-    if  group_flow.doff_maximum_permitted != -1:
+    if group_flow.doff_maximum_permitted != -1:
         command = command + "--don-min=" + str(group_flow.doff_minimum_permitted) + " --don-max=" + str(
             group_flow.doff_maximum_permitted) + " "
     else:
@@ -312,9 +313,18 @@ def run_flows_on_off():
                 os.system(command)
 
 
-def tcp_flood_attack(receiver, port):
-    command = "docker exec sender hping3 -c 150000 -d 120 -S -w 64 -p " + port + " --flood --rand-source " + receiver
-    flash('Activating TCP flood attack: {}'.format(command))
+def flood_attack(receiver, port, type):
+    if type == "tcp":
+        command = "docker exec sender hping3 -c 150000 -d 120 -S -w 64 -p " + port + " --flood --rand-source " + receiver
+    elif type == "udp":
+        command = "docker exec sender hping3 -c 150000 -d 120 -S -w 64 -p " + port + " --flood --rand-source " + receiver + " --udp"
+    else:
+        return 1
+
+    if type == "tcp":
+        flash('Activating TCP flood attack: {}'.format(command))
+    elif type == "udp":
+        flash('Activating UDP flood attack: {}'.format(command))
     print(command)
     os.system(command)
 
