@@ -317,7 +317,7 @@ def flood_attack(receiver, port, type):
     if type == "tcp":
         command = "docker exec sender hping3 -c 150000 -d 120 -S -w 64 -p " + port + " --flood --rand-source " + receiver
     elif type == "udp":
-        command = "docker exec sender hping3 -c 150000 -d 120 -S -w 64 -p " + port + " --flood --rand-source " + receiver + " --udp"
+        command = "docker exec sender hping3 -c 150000 -d 120 -S -w 64 -p " + port + " --udp --flood --rand-source " + receiver
     else:
         return 1
 
