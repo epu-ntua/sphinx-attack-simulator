@@ -58,4 +58,4 @@ COPY ./create_db.py .
 
 RUN chmod +x flask.sh
 
-CMD [./flask.sh]
+ENTRYPOINT [./flask.sh]

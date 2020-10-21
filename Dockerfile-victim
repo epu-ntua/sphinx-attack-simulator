@@ -36,6 +36,6 @@ WORKDIR /app/
 
 COPY ./sender-receiver.sh .
 
-RUN chmod +x sender-receiver.sh
+RUN chmod +x sendCMDer-receiver.sh
 
-CMD ["./sender-receiver.sh"]
+ENTRYPOINT ["./sender-receiver.sh"]

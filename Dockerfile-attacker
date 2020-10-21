@@ -38,4 +38,4 @@ COPY ./sender-receiver.sh .
 
 RUN chmod +x sender-receiver.sh
 
-CMD ["./sender-receiver.sh"]
+ENTRYPOINT ["./sender-receiver.sh"]
