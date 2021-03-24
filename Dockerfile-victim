@@ -6,7 +6,8 @@ MAINTAINER Sotiris Pelekis
 WORKDIR  /app
 
 # Install D-ITG and compile
-RUN apt-get update && \
+RUN apt-get update -y && \
+    apt-get upgrade -y && \
     apt-get install -y wget && \
     apt-get install -y make && \
     apt-get install -y g++ && \
