@@ -2,36 +2,45 @@ version: "3"
 services:
 
   node1:
-    #image:pelekhs/behaviour_node
+    #image:behaviour-attack-simulator-flask_node1
     container_name: sender
+    stdin_open: true
+    tty: true
     build:
       context: .
       dockerfile: Dockerfile-attacker
     networks:
+    #  - ntua
       - sphinx-net
     working_dir: /app
     command: ["./sender-receiver.sh"]
 
   node2:
-    #image:pelekhs/behaviour_node
+    #image:behaviour-attack-simulator-flask_node2
     container_name: receiver
+    stdin_open: true
+    tty: true
     build:
       context: .
       dockerfile: Dockerfile-victim
     networks:
+    #  - ntua
       - sphinx-net
     working_dir: /app
     command: ["./sender-receiver.sh"]
 
   supervisor:
-    #image:pelekhs/behaviour_supervisor
+    #image:behaviour-attack-simulator-flask_supervisor
     container_name: super
+    stdin_open: true
+    tty: true
     build:
       context: .
       dockerfile: Dockerfile-supervisor
     ports:
       - "5002:5002"
     networks:
+    #  - ntua
       - sphinx-net
     volumes:
       - '/var/run/docker.sock:/var/run/docker.sock'
@@ -41,3 +50,13 @@ services:
 networks:
   sphinx-net:
     driver: bridge
+#  ntua:
+#    driver: macvlan 
+
+# MACVLAN connects you to physical network.
+# !!! 
+# Need to configure DHCP for MACvLAN and reserve certain IPs 
+# so that you do not have conflicts. 
+# Docker assigns IPs not DHCP server in a MACvLAN network and that is a problem
+# See here: https://blog.oddbit.com/post/2018-03-12-using-docker-macvlan-networks/
+# Also the host is not able to see the containers. That can be solved as well.
